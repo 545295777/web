@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超级工具箱 - 私人订制</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F9FAFB;
+            color: #24292f;
+            line-height: 1.5;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background-color: #FFFFFF;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(27, 31, 35, 0.04);
+            border: 1px solid #d0d7de;
+        }
+        
+        header {
+            padding: 16px 20px;
+            background-color: #FFFFFF;
+        }
+        
+        h1 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .title-icon {
+            color: #0969da; /* 蓝色图标 */
+            font-size: 14px; /* 与字体大小相同 */
+        }
+        
+        .nav-links {
+            padding: 8px 0 36px;
+            position: relative;
+        }
+        
+        /* 时间线竖线 - 上端不出头，在圆形分隔符中心 */
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 22px;
+            bottom: 18px;
+            width: 1px;
+            background-color: #d0d7de;
+            z-index: 1;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 14px 20px 14px 44px;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        /* 移除点击时的背景变化 */
+        .nav-item:active {
+            background-color: transparent;
+        }
+        
+        /* 保留悬停效果 */
+        .nav-item:hover, .nav-item:focus {
+            background-color: #f6f8fa;
+        }
+        
+        /* 时间线圆点 - 更小且与背景颜色一致，轴线穿过圆点中心 */
+        .timeline-dot {
+            position: absolute;
+            left: 16px;
+            top: 18px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #d0d7de;
+            z-index: 2;
+            border: 1px solid #d0d7de;
+        }
+        
+        .nav-content {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .nav-text {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 14px;
+            line-height: 1.4;
+            align-items: baseline; /* 确保网址名称和介绍在同一基线上对齐 */
+        }
+        
+        .website-name {
+            font-weight: 600; /* 网址名称加粗 */
+            color: #24292f;
+            font-size: 14px; /* 网址名称字号 */
+        }
+        
+        .website-desc {
+            color: #6e7781;
+            font-weight: 400;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px; /* 网址介绍字号 - 比网址名称小两号 */
+            line-height: 1.2; /* 调整行高以匹配名称的行高 */
+        }
+        
+        .quick-access {
+            margin-top: 24px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(27, 31, 35, 0.04);
+            border: 1px solid #d0d7de;
+        }
+        
+        .quick-access h2 {
+            font-size: 14px; /* 调整为与"网址导航-科技动态"相同大小 */
+            margin-bottom: 16px;
+            color: #24292f;
+            font-weight: 600;
+        }
+        
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .quick-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #FFFFFF;
+            padding: 16px 8px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #24292f;
+            transition: all 0.2s ease;
+            border: 1px solid #d0d7de;
+        }
+        
+        .quick-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #0969da;
+        }
+        
+        .quick-link i {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #0969da;
+        }
+        
+        .quick-link span {
+            font-size: 13px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 24px;
+            color: #6e7781;
+            font-size: 12px;
+            padding: 16px;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+            
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* 在小屏幕上，如果一行放不下，允许换行 */
+            .nav-text {
+                flex-wrap: wrap;
+            }
+            
+            .website-desc {
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <i class="fas fa-compass title-icon"></i>
+                超级工具箱 - 私人订制
+            </h1>
+        </header>
+        
+        <div class="nav-links">
+            <!-- 时间线竖线 - 上端不出头，在圆形分隔符中心 -->
+            <div class="timeline-line"></div>
+            
+            <!-- 导航项 -->
+            <a href="http://202.107.84.96:8088/login" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>移动采编系统</b></span>
+                        <span class="website-desc">方正畅享全媒体</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="https://www.kdocs.cn/" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>金山文档</b></span>
+                        <span class="website-desc">WPS云文档</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="https://mail.qq.com/" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>QQ邮箱</b></span>
+                        <span class="website-desc">邮箱网页端</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="https://www.baidu.com/" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>百度</b></span>
+                        <span class="website-desc">百度一下，你就知道</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="https://paper.people.com.cn/rmrb/pc/layout" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>人民日报</b></span>
+                        <span class="website-desc">在线电子版</span>
+                    </div>
+                </div>
+            </a>
+			<a href="https://epaper.lnd.com.cn/lnrbepaper/pc/layout/" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>辽宁日报</b></span>
+                        <span class="website-desc">在线电子版</span>
+                    </div>
+                </div>
+            </a>
+			<a href="https://cp.baidu.com/" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>橙篇</b></span>
+                        <span class="website-desc">AI内容检测</span>
+                    </div>
+                </div>
+            </a>
+			<a href="https://matrix.tencent.com/ai-detect/ai_gen_txt" class="nav-item" target="_blank">
+                <div class="timeline-dot"></div>
+                <div class="nav-content">
+                    <div class="nav-text">
+                        <span class="website-name"><b>朱雀AI检测助手</b></span>
+                        <span class="website-desc">腾讯旗下</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="quick-access">
+        <h2>快速访问</h2>
+        <div class="quick-links">
+            <a href="https://github.com" class="quick-link" target="_blank">
+                <i class="fab fa-github"></i>
+                <span><b>GitHub</b></span>
+            </a>
+            
+            <a href="https://www.kdocs.cn/l/caGZ4LfhlAem?from=docs" class="quick-link" target="_blank">
+                <i class="fab fa-stack-overflow"></i>
+                <span><b>网址大全</b></span>
+            </a>
+            
+            <a href="https://github.com/syncthing" class="quick-link" target="_blank">
+                <i class="fas fa-code"></i>
+                <span><b>Syncthin</b></span>
+            </a>
+            
+            <a href="https://obsidian.md/" class="quick-link" target="_blank">
+                <i class="fab fa-npm"></i>
+                <span><b>Obsidian</b></span>
+            </a>
+            
+            <a href="https://index.baidu.com/v2/index.html#/" class="quick-link" target="_blank">
+                <i class="fab fa-css3-alt"></i>
+                <span><b>百度指数</b></span>
+            </a>
+            
+            <a href="https://www.czgts.cn/" class="quick-link" target="_blank">
+                <i class="fab fa-dev"></i>
+                <span><b>创作罐头</b></span>
+            </a>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2026 超级工具 | Github Html</p>
+       
+    </footer>
+</body>
+</html>
